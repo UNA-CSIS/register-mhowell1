@@ -1,6 +1,6 @@
 <?php
 // start session
-
+session_start();
 // login to the softball database
 
 // select password from users where username = <what the user typed in>
