@@ -1,9 +1,12 @@
-<?php
-session_start();
-include "validate.php";
+<?php session_start();
+include_once 'validate.php';
+$endUser = test_input($_POST['user']);
+$endUserPassword = test_input($_POST['pwd']);
 
-$user = test_input($_POST["user"]);
-$post_password = test_input($_POST["pwd"]);
+if (strlen($endUser) < 1 || strlen($endUserPassword) < 1) {
+    header("location:index.php");
+    exit();
+}
 
 $servername = "localhost";
 $username = "root";
@@ -15,14 +18,14 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT password FROM users WHERE username = '$user'";
+$sql = "SELECT password FROM users WHERE username = '$endUser'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     if ($row = $result->fetch_assoc()) {
-        $verified = password_verify($post_password, trim($row['password']));
+        $verified = password_verify( $endUserPassword, trim($row['password']));
         if ($verified) {
-          $_SESSION['username'] = $user;
+            $_SESSION['username'] = $endUser;
             $_SESSION['error'] = '';
         } else {
             $_SESSION['error'] = 'invalid username or password';
@@ -31,8 +34,6 @@ if ($result->num_rows > 0) {
 } else {
     $_SESSION['error'] = 'invalid username or password';
 }
-
 $conn->close();
-
-header("Location: index.php");
-exit;
+header("location:games.php");
+?>

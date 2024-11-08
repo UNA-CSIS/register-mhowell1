@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] = "$_POST") {
 
 
 // create the password_hash using the PASSWORD_DEFAULT argument
-$password_hashed = password_hash($password,PASSWORD_DEFAULT);
+$password_hashed = password_hash($pwd,PASSWORD_DEFAULT);
 // login to the database
 $servername = "localhost";
 $username = "root";
@@ -25,7 +25,7 @@ $pass = "";
 $dbname = "softball";
 
 // Create connection
-$conn = new mysqli($servername, $username, $pass, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
@@ -38,7 +38,7 @@ if ($result -> num_rows > 0 ){
   echo "Username already exists";
   header( "refresh:2;url=index.php" );
 } else {
-  $sql = "INSERT INTO users (username, password) VALUES ('$user', '$$password_hashed')";
+  $sql = "INSERT INTO users (username, password) VALUES ('$user', '$password_hashed')";
 }
 
 if ($conn->query($sql) === TRUE) {

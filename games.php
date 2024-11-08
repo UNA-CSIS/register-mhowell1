@@ -14,7 +14,6 @@ if (isset($_SESSION['username'])) {
         <title></title>
     </head>
     <body>
-        Display games here...
         <?php
         $servername = "localhost";
         $username = "root";
@@ -34,7 +33,7 @@ if (isset($_SESSION['username'])) {
         if ($result->num_rows > 0) {
           // output data of each row
           while($row = $result->fetch_assoc()) {
-            echo "id: " . $row["opponent"]. " - Name: " . $row["site"]. " " . $row["result"]. "<br>";
+            echo "Opponent: " . $row["opponent"]. " - Site: " . $row["site"]. "- Result:  " . $row["result"]. "<br>";
           }
         } else {
           echo "0 results";
