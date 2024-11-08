@@ -1,49 +1,38 @@
 <?php
-// start session
 session_start();
+include "validate.php";
+
 $user = test_input($_POST["user"]);
 $post_password = test_input($_POST["pwd"]);
-// login to the softball database
+
 $servername = "localhost";
 $username = "root";
-$pass = "";
+$password = "";
 $dbname = "softball";
 
-// Create connection
-$conn = new mysqli($servername, $username, $pass, $dbname);
-// Check connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT password FROM users WHERE username = `$user` ";
+$sql = "SELECT password FROM users WHERE username = '$user'";
 $result = $conn->query($sql);
 
-if ($result->num_rows < 1) {
-    header("Location: index.php");
-} else {
-    $row = $result->fetch_assoc();
-    if (password_verify($post_password, $row['password'])) {
-        echo "Logged in";
-        $_SESSION["username"] = $user;
-        header("Location: games.php");
-        exit();
-    } else {
-        echo "Invalid password";
-        header("Location: login.php");
-        exit();
+if ($result->num_rows > 0) {
+    if ($row = $result->fetch_assoc()) {
+        $verified = password_verify($post_password, trim($row['password']));
+        if ($verified) {
+          $_SESSION['username'] = $user;
+            $_SESSION['error'] = '';
+        } else {
+            $_SESSION['error'] = 'invalid username or password';
+        }
     }
+} else {
+    $_SESSION['error'] = 'invalid username or password';
 }
 
 $conn->close();
 
-header("location: games.php");
-// select password from users where username = <what the user typed in>
-
-// if no rows, then username is not valid (but don't tell Mallory) just send
-// her back to the login
-
-// otherwise, password_verify(password from form, password from db)
-
-// if good, put username in session, otherwise send back to login
-
+header("Location: index.php");
+exit;
