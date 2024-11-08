@@ -4,12 +4,13 @@ include "validate.php";
 session_start();
 // get all 3 strings from the form (and scrub w/ validation function)
 if ($_SERVER["REQUEST_METHOD"] = "$_POST") {
-    $username = test_input($_POST["user"]);
-    $password = test_input($_POST["pwd"]);
+    $user = test_input($_POST["user"]);
+    $pwd = test_input($_POST["pwd"]);
     $password_repeat = test_input($_POST["repeat"]);
 
-    if ($password != $password_repeat) {
+    if ($pwd != $password_repeat) {
         echo "Password do not match";
+        header("location: index.php");
     }
 }
 // make sure that the two password values match!
@@ -18,37 +19,30 @@ if ($_SERVER["REQUEST_METHOD"] = "$_POST") {
 // create the password_hash using the PASSWORD_DEFAULT argument
 $password_hashed = password_hash($password,PASSWORD_DEFAULT);
 // login to the database
-<?php
 $servername = "localhost";
 $username = "root";
-$password = "";
-$dbname = "games";
+$pass = "";
+$dbname = "softball";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $pass, $dbname);
 // Check connection
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
-$query = "SELECT * FROM users WHERE username = '$username'";
+
+//check if username already exists
+$query = "SELECT * FROM users WHERE username = '$user'";
 $result = $conn->query($query);
 if ($result -> num_rows > 0 ){
   echo "Username already exists";
+  header( "refresh:2;url=index.php" );
 } else {
-  $sql = "INSERT INTO users (username, password) VALUES (`$username`,`$password_hashed`)";
-
+  $sql = "INSERT INTO users (username, password) VALUES ('$user', '$$password_hashed')";
 }
 
 if ($conn->query($sql) === TRUE) {
-  echo "New record created successfully";
-} else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
+  echo "New account created";
+  header("refresh:2;url=index.php");
+};
 $conn->close();
-?>
-// make sure that the new user is not already in the database
-
-// insert username and password hash into db (put the username in the session
-// or make them login)
-
