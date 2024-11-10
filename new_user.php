@@ -9,9 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] = "$_POST") {
     $password_repeat = test_input($_POST["repeat"]);
 
     if ($pwd != $password_repeat) {
-        echo "Password do not match";
-        header("location: index.php");
-    }
+      echo "Passwords do not match";
+      return;
+  }
+  
 }
 // make sure that the two password values match!
 

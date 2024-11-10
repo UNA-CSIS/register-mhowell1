@@ -29,16 +29,28 @@ if (isset($_SESSION['username'])) {
         
         $sql = "SELECT opponent, site, result FROM games";
         $result = $conn->query($sql);
+
+        echo "<table border = `1`>
+              <tr>
+              <th>Opponent</th>
+              <th>Site</th>
+              <th>Result</th>
+              </tr>";
         
         if ($result->num_rows > 0) {
           // output data of each row
           while($row = $result->fetch_assoc()) {
-            echo "Opponent: " . $row["opponent"]. " - Site: " . $row["site"]. "- Result:  " . $row["result"]. "<br>";
+           echo "<tr>";
+           echo "<td>" . $row['opponent'] . "</td>";
+           echo "<td>" . $row['site'] . "</td>";
+           echo "<td>" . $row['result'] . "</td>";
           }
         } else {
           echo "0 results";
         }
         $conn->close();
         ?>
+
+        <a href="index.php">Home</a>
     </body>
 </html>
